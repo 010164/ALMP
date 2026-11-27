@@ -11,7 +11,8 @@ automatiquement sur chaque page.
 | `02-modele-courrier.docx` | Modèle de courrier avec champs à remplacer : `[destinataire]`, `[date]`, `[objet]`, corps, signature. |
 | `03-modele-devis.docx` | Modèle de devis : tableau de prestations (désignation, quantité, PU HT, montant HT), totaux HT / TVA / TTC, conditions, « Bon pour accord ». |
 | `blocs-de-texte.md` | Blocs de texte prêts à copier-coller (en-tête, mentions légales, médiation CNPM, signature e-mail) pour e-mails, PDF ou autres logiciels. |
-| `generer_modeles.py` | Script qui régénère les trois fichiers .docx (Python 3 + `python-docx`). |
+| `logo-ALM.png` | Logo de la société, intégré automatiquement dans l'en-tête des trois fichiers .docx. |
+| `generer_modeles.py` | Script qui régénère les trois fichiers .docx (Python 3 + `python-docx` + `Pillow` si le logo doit être converti). |
 
 ## Contenu intégré dans chaque document
 
@@ -20,6 +21,6 @@ automatiquement sur chaque page.
 
 ## Personnalisation
 
-- **Logo** : dans Word, double-cliquez sur l'en-tête puis `Insertion > Images` pour placer votre logo à côté du nom de la société.
+- **Logo** : déjà intégré en haut à gauche de l'en-tête (`logo-ALM.png`, hauteur 1,4 cm, à côté du nom de la société). Pour le changer, remplacez `logo-ALM.png` par votre nouveau logo (PNG ou JPG, fond blanc de préférence) puis relancez `python3 generer_modeles.py`. Dans Word, vous pouvez aussi double-cliquer sur l'en-tête et remplacer l'image manuellement.
 - **Couleur** : le nom de la société est en bleu foncé (`#1F3864`) ; modifiez `BLEU` dans `generer_modeles.py` pour changer la couleur de marque, puis relancez `python3 generer_modeles.py`.
 - **Champs à remplacer** : tous les champs entre crochets `[...]` sont à personnaliser dans chaque document.

@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 """Génère les modèles de documents Word pour SARL ALM PATRIMOINE CONSEILS."""
 
+import os
+
 from docx import Document
 from docx.shared import Pt, Cm, RGBColor
-from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT
 from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
+
+DOSSIER = os.path.dirname(os.path.abspath(__file__))
+LOGO_PATH = os.path.join(DOSSIER, "logo-ALM.png")
 
 ENTETE_TITRE = "SARL ALM PATRIMOINE CONSEILS"
 ENTETE_LIGNE = (
@@ -54,11 +59,11 @@ def configurer_page(doc):
     s = doc.sections[0]
     s.page_width = Cm(21.0)
     s.page_height = Cm(29.7)
-    s.top_margin = Cm(2.7)
+    s.top_margin = Cm(3.2)
     s.bottom_margin = Cm(3.9)
     s.left_margin = Cm(2.0)
     s.right_margin = Cm(2.0)
-    s.header_distance = Cm(0.9)
+    s.header_distance = Cm(0.8)
     s.footer_distance = Cm(0.7)
     doc.styles["Normal"].font.name = "Calibri"
     doc.styles["Normal"].font.size = Pt(11)
@@ -70,7 +75,12 @@ def ajouter_entete(section):
     h.is_linked_to_previous = False
     p = h.paragraphs[0]
     p.text = ""
-    r = p.add_run(ENTETE_TITRE)
+    if os.path.exists(LOGO_PATH):
+        p.add_run().add_picture(LOGO_PATH, height=Cm(1.4))
+        p.paragraph_format.tab_stops.add_tab_stop(Cm(2.3), WD_TAB_ALIGNMENT.LEFT)
+        r = p.add_run("\t" + ENTETE_TITRE)
+    else:
+        r = p.add_run(ENTETE_TITRE)
     r.bold = True
     r.font.size = Pt(15)
     r.font.color.rgb = BLEU
@@ -129,7 +139,7 @@ def modele_papier_entete():
         "automatiquement sur chaque page.]",
         taille=10, italique=True, couleur=GRIS,
     )
-    doc.save("01-papier-a-entete.docx")
+    doc.save(os.path.join(DOSSIER, "01-papier-a-entete.docx"))
 
 
 def modele_courrier():
@@ -150,7 +160,7 @@ def modele_courrier():
         espace_apres=24,
     )
     paragraphe(doc, "[Prénom NOM]\n[Qualité]\n" + ENTETE_TITRE, gras=False)
-    doc.save("02-modele-courrier.docx")
+    doc.save(os.path.join(DOSSIER, "02-modele-courrier.docx"))
 
 
 def modele_devis():
@@ -209,7 +219,7 @@ def modele_devis():
     paragraphe(doc, "Bon pour accord", gras=True, espace_apres=18)
     paragraphe(doc, "Date : [………]          Signature du client :", taille=10, espace_apres=24)
     paragraphe(doc, "[Prénom NOM] – " + ENTETE_TITRE, taille=10)
-    doc.save("03-modele-devis.docx")
+    doc.save(os.path.join(DOSSIER, "03-modele-devis.docx"))
 
 
 if __name__ == "__main__":
